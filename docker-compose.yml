@@ -1,0 +1,27 @@
+# Docker Compose para el entorno de desarrollo del Sistema de Gestión Universitaria (SGU)
+
+services:
+  # Servicio de la Base de Datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: sgu-mysql-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: sgu_db
+      MYSQL_USER: sgu_user
+      MYSQL_PASSWORD: sgu_password
+      MYSQL_ROOT_PASSWORD: root_password_secreto # Cambiar en un entorno de producción
+    ports:
+      # Expone el puerto de MySQL al host para que la aplicación Java pueda conectarse
+      - "3306:3306"
+    volumes:
+      # Monta un volumen para persistir los datos de MySQL
+      - mysql-data:/var/lib/mysql
+      # Monta el script SQL unificado para crear el schema y poblar los datos
+      - ./schema.sql:/docker-entrypoint-initdb.d/init.sql
+    # Forzar la codificación UTF-8 a nivel de servidor (más fiable que el .cnf por problemas de permisos en Windows)
+    command: [--character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci]
+
+volumes:
+  # Define el volumen para la persistencia de datos
+  mysql-data:

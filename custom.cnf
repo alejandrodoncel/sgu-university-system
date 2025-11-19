@@ -1,0 +1,13 @@
+# Archivo de configuración personalizado de MySQL para forzar UTF-8 en todos los niveles.
+
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+
+[mysqld]
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+init_connect='SET NAMES utf8mb4'
+character_set_client = utf8mb4
